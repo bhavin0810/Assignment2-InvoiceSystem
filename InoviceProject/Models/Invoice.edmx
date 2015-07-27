@@ -1,0 +1,613 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Inovice.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="category_information">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="numeric" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CATEGORY_NAME" Type="varchar" MaxLength="20" />
+          <Property Name="DESCRIPTION" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="customer_information">
+          <Key>
+            <PropertyRef Name="CUSTOMER_ID" />
+          </Key>
+          <Property Name="CUSTOMER_ID" Type="numeric" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CUSTOMER_LASTNAME" Type="varchar" MaxLength="30" />
+          <Property Name="CUSTOMER_FIRSTNAME" Type="varchar" MaxLength="30" />
+          <Property Name="ADDRESS" Type="varchar" MaxLength="50" />
+          <Property Name="CITY" Type="varchar" MaxLength="20" />
+          <Property Name="PROVINCE" Type="char" MaxLength="2" />
+          <Property Name="POSTAL_CODE" Type="varchar" MaxLength="10" />
+          <Property Name="USER_NAME" Type="varchar" MaxLength="30" />
+          <Property Name="PASSWORD" Type="varchar" MaxLength="30" />
+          <Property Name="USERTYPE" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="order_detail">
+          <Key>
+            <PropertyRef Name="ORDER_ID" />
+            <PropertyRef Name="PRODUCT_ID" />
+          </Key>
+          <Property Name="ORDER_ID" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="PRODUCT_ID" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="QUANTITY" Type="int" />
+          <Property Name="UNIT_PRICE" Type="decimal" Precision="8" Scale="0" />
+        </EntityType>
+        <EntityType Name="order_master">
+          <Key>
+            <PropertyRef Name="ORDER_ID" />
+          </Key>
+          <Property Name="ORDER_ID" Type="numeric" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CUSTOMER_ID" Type="numeric" Precision="10" Scale="0" />
+          <Property Name="ORDER_DATE" Type="date" />
+          <Property Name="SHIPPING_FIRSTNAME" Type="varchar" MaxLength="50" />
+          <Property Name="SHIPPING_LASTNAME" Type="varchar" MaxLength="50" />
+          <Property Name="SHIPPING_ADDRESS" Type="varchar" MaxLength="50" />
+          <Property Name="SHIPPING_CITY" Type="varchar" MaxLength="50" />
+          <Property Name="SHIPPING_STATE" Type="varchar" MaxLength="50" />
+          <Property Name="SHIPPING_POSTAL_CODE" Type="nchar" MaxLength="10" />
+          <Property Name="USER_ID" Type="nvarchar" MaxLength="128" />
+          <Property Name="PRODUCT_ID" Type="numeric" Precision="10" Scale="0" />
+          <Property Name="QUANTITY" Type="int" />
+          <Property Name="UNIT_PRICE" Type="decimal" Precision="8" Scale="0" />
+          <Property Name="CATEGORY_ID" Type="numeric" Precision="10" Scale="0" />
+        </EntityType>
+        <EntityType Name="product_information">
+          <Key>
+            <PropertyRef Name="PRODUCT_ID" />
+          </Key>
+          <Property Name="PRODUCT_ID" Type="numeric" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NAME" Type="varchar" MaxLength="50" />
+          <Property Name="SUPPLIER_ID" Type="numeric" Precision="10" Scale="0" />
+          <Property Name="CATEGORY_ID" Type="numeric" Precision="10" Scale="0" />
+          <Property Name="QUANTITY" Type="int" />
+          <Property Name="UNIT_PRICE" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="supplier_information">
+          <Key>
+            <PropertyRef Name="SUPPLIER_ID" />
+          </Key>
+          <Property Name="SUPPLIER_ID" Type="numeric" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SUPPLIER_NAME" Type="varchar" MaxLength="50" />
+          <Property Name="ADDRESS" Type="varchar" MaxLength="50" />
+          <Property Name="CITY" Type="varchar" MaxLength="50" />
+          <Property Name="STATE" Type="varchar" MaxLength="50" />
+          <Property Name="POSTAL_CODE" Type="nchar" MaxLength="10" />
+          <Property Name="COUNTRY" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_category_order_master">
+          <End Role="category_information" Type="Self.category_information" Multiplicity="0..1" />
+          <End Role="order_master" Type="Self.order_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category_information">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="order_master">
+              <PropertyRef Name="CATEGORY_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="order_master" Type="Self.order_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="order_master">
+              <PropertyRef Name="USER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_customer">
+          <End Role="customer_information" Type="Self.customer_information" Multiplicity="0..1" />
+          <End Role="order_master" Type="Self.order_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer_information">
+              <PropertyRef Name="CUSTOMER_ID" />
+            </Principal>
+            <Dependent Role="order_master">
+              <PropertyRef Name="CUSTOMER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_master_detail">
+          <End Role="order_master" Type="Self.order_master" Multiplicity="1" />
+          <End Role="order_detail" Type="Self.order_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="order_master">
+              <PropertyRef Name="ORDER_ID" />
+            </Principal>
+            <Dependent Role="order_detail">
+              <PropertyRef Name="ORDER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_category">
+          <End Role="category_information" Type="Self.category_information" Multiplicity="0..1" />
+          <End Role="product_information" Type="Self.product_information" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category_information">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="product_information">
+              <PropertyRef Name="CATEGORY_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_order">
+          <End Role="product_information" Type="Self.product_information" Multiplicity="1" />
+          <End Role="order_detail" Type="Self.order_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product_information">
+              <PropertyRef Name="PRODUCT_ID" />
+            </Principal>
+            <Dependent Role="order_detail">
+              <PropertyRef Name="PRODUCT_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_order_master">
+          <End Role="product_information" Type="Self.product_information" Multiplicity="0..1" />
+          <End Role="order_master" Type="Self.order_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product_information">
+              <PropertyRef Name="PRODUCT_ID" />
+            </Principal>
+            <Dependent Role="order_master">
+              <PropertyRef Name="PRODUCT_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_supplier">
+          <End Role="supplier_information" Type="Self.supplier_information" Multiplicity="0..1" />
+          <End Role="product_information" Type="Self.product_information" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier_information">
+              <PropertyRef Name="SUPPLIER_ID" />
+            </Principal>
+            <Dependent Role="product_information">
+              <PropertyRef Name="SUPPLIER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InoviceStoreContainer">
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="category_information" EntityType="Self.category_information" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="customer_information" EntityType="Self.customer_information" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="order_detail" EntityType="Self.order_detail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="order_master" EntityType="Self.order_master" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="product_information" EntityType="Self.product_information" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="supplier_information" EntityType="Self.supplier_information" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_category_order_master" Association="Self.FK_category_order_master">
+            <End Role="category_information" EntitySet="category_information" />
+            <End Role="order_master" EntitySet="order_master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_AspNetUsers" Association="Self.FK_order_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="order_master" EntitySet="order_master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_customer" Association="Self.FK_order_customer">
+            <End Role="customer_information" EntitySet="customer_information" />
+            <End Role="order_master" EntitySet="order_master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_master_detail" Association="Self.FK_order_master_detail">
+            <End Role="order_master" EntitySet="order_master" />
+            <End Role="order_detail" EntitySet="order_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_category" Association="Self.FK_product_category">
+            <End Role="category_information" EntitySet="category_information" />
+            <End Role="product_information" EntitySet="product_information" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_order" Association="Self.FK_product_order">
+            <End Role="product_information" EntitySet="product_information" />
+            <End Role="order_detail" EntitySet="order_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_order_master" Association="Self.FK_product_order_master">
+            <End Role="product_information" EntitySet="product_information" />
+            <End Role="order_master" EntitySet="order_master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_supplier" Association="Self.FK_product_supplier">
+            <End Role="supplier_information" EntitySet="supplier_information" />
+            <End Role="product_information" EntitySet="product_information" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Inovice" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="category_information">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Precision="10" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DESCRIPTION" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="product_information" Relationship="Self.FK_product_category" FromRole="category_information" ToRole="product_information" />
+          <Property Name="CATEGORY_NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="order_master" Relationship="Inovice.FK_category_order_master" FromRole="category_information" ToRole="order_master" />
+        </EntityType>
+        <EntityType Name="customer_information">
+          <Key>
+            <PropertyRef Name="CUSTOMER_ID" />
+          </Key>
+          <Property Name="CUSTOMER_ID" Type="Decimal" Precision="10" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CUSTOMER_LASTNAME" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CUSTOMER_FIRSTNAME" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ADDRESS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CITY" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PROVINCE" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="POSTAL_CODE" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="USER_NAME" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="PASSWORD" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="USERTYPE" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="order_master" Relationship="Self.FK_order_customer" FromRole="customer_information" ToRole="order_master" />
+        </EntityType>
+        <EntityType Name="order_detail">
+          <Key>
+            <PropertyRef Name="ORDER_ID" />
+            <PropertyRef Name="PRODUCT_ID" />
+          </Key>
+          <Property Name="ORDER_ID" Type="Decimal" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="PRODUCT_ID" Type="Decimal" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="QUANTITY" Type="Int32" />
+          <Property Name="UNIT_PRICE" Type="Decimal" Precision="8" Scale="0" />
+          <NavigationProperty Name="order_master" Relationship="Self.FK_order_master_detail" FromRole="order_detail" ToRole="order_master" />
+          <NavigationProperty Name="product_information" Relationship="Self.FK_product_order" FromRole="order_detail" ToRole="product_information" />
+        </EntityType>
+        <EntityType Name="order_master">
+          <Key>
+            <PropertyRef Name="ORDER_ID" />
+          </Key>
+          <Property Name="ORDER_ID" Type="Decimal" Precision="10" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CUSTOMER_ID" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="ORDER_DATE" Type="DateTime" Precision="0" />
+          <Property Name="SHIPPING_FIRSTNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SHIPPING_LASTNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SHIPPING_ADDRESS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SHIPPING_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SHIPPING_STATE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SHIPPING_POSTAL_CODE" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="customer_information" Relationship="Self.FK_order_customer" FromRole="order_master" ToRole="customer_information" />
+          <NavigationProperty Name="order_detail" Relationship="Self.FK_order_master_detail" FromRole="order_master" ToRole="order_detail" />
+          <Property Name="USER_ID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="Inovice.FK_order_AspNetUsers" FromRole="order_master" ToRole="AspNetUser" />
+          <Property Name="PRODUCT_ID" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="QUANTITY" Type="Int32" />
+          <Property Name="UNIT_PRICE" Type="Decimal" Precision="8" Scale="0" />
+          <NavigationProperty Name="product_information" Relationship="Inovice.FK_product_order_master" FromRole="order_master" ToRole="product_information" />
+          <Property Name="CATEGORY_ID" Type="Decimal" Precision="10" Scale="0" />
+          <NavigationProperty Name="category_information" Relationship="Inovice.FK_category_order_master" FromRole="order_master" ToRole="category_information" />
+        </EntityType>
+        <EntityType Name="product_information">
+          <Key>
+            <PropertyRef Name="PRODUCT_ID" />
+          </Key>
+          <Property Name="PRODUCT_ID" Type="Decimal" Precision="10" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SUPPLIER_ID" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="CATEGORY_ID" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="QUANTITY" Type="Int32" />
+          <Property Name="UNIT_PRICE" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="category_information" Relationship="Self.FK_product_category" FromRole="product_information" ToRole="category_information" />
+          <NavigationProperty Name="order_detail" Relationship="Self.FK_product_order" FromRole="product_information" ToRole="order_detail" />
+          <NavigationProperty Name="supplier_information" Relationship="Self.FK_product_supplier" FromRole="product_information" ToRole="supplier_information" />
+          <NavigationProperty Name="order_master" Relationship="Inovice.FK_product_order_master" FromRole="product_information" ToRole="order_master" />
+        </EntityType>
+        <EntityType Name="supplier_information">
+          <Key>
+            <PropertyRef Name="SUPPLIER_ID" />
+          </Key>
+          <Property Name="SUPPLIER_ID" Type="Decimal" Precision="10" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ADDRESS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="STATE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="POSTAL_CODE" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="COUNTRY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="product_information" Relationship="Self.FK_product_supplier" FromRole="supplier_information" ToRole="product_information" />
+          <Property Name="SUPPLIER_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_product_category">
+          <End Role="category_information" Type="Self.category_information" Multiplicity="0..1" />
+          <End Role="product_information" Type="Self.product_information" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category_information">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="product_information">
+              <PropertyRef Name="CATEGORY_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_customer">
+          <End Role="customer_information" Type="Self.customer_information" Multiplicity="0..1" />
+          <End Role="order_master" Type="Self.order_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer_information">
+              <PropertyRef Name="CUSTOMER_ID" />
+            </Principal>
+            <Dependent Role="order_master">
+              <PropertyRef Name="CUSTOMER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_master_detail">
+          <End Role="order_master" Type="Self.order_master" Multiplicity="1" />
+          <End Role="order_detail" Type="Self.order_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="order_master">
+              <PropertyRef Name="ORDER_ID" />
+            </Principal>
+            <Dependent Role="order_detail">
+              <PropertyRef Name="ORDER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_order">
+          <End Role="product_information" Type="Self.product_information" Multiplicity="1" />
+          <End Role="order_detail" Type="Self.order_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product_information">
+              <PropertyRef Name="PRODUCT_ID" />
+            </Principal>
+            <Dependent Role="order_detail">
+              <PropertyRef Name="PRODUCT_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_supplier">
+          <End Role="supplier_information" Type="Self.supplier_information" Multiplicity="0..1" />
+          <End Role="product_information" Type="Self.product_information" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier_information">
+              <PropertyRef Name="SUPPLIER_ID" />
+            </Principal>
+            <Dependent Role="product_information">
+              <PropertyRef Name="SUPPLIER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InoviceConnection" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="category_information" EntityType="Self.category_information" />
+          <EntitySet Name="customer_information" EntityType="Self.customer_information" />
+          <EntitySet Name="order_detail" EntityType="Self.order_detail" />
+          <EntitySet Name="order_master" EntityType="Self.order_master" />
+          <EntitySet Name="product_information" EntityType="Self.product_information" />
+          <EntitySet Name="supplier_information" EntityType="Self.supplier_information" />
+          <AssociationSet Name="FK_product_category" Association="Self.FK_product_category">
+            <End Role="category_information" EntitySet="category_information" />
+            <End Role="product_information" EntitySet="product_information" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_customer" Association="Self.FK_order_customer">
+            <End Role="customer_information" EntitySet="customer_information" />
+            <End Role="order_master" EntitySet="order_master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_master_detail" Association="Self.FK_order_master_detail">
+            <End Role="order_master" EntitySet="order_master" />
+            <End Role="order_detail" EntitySet="order_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_order" Association="Self.FK_product_order">
+            <End Role="product_information" EntitySet="product_information" />
+            <End Role="order_detail" EntitySet="order_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_supplier" Association="Self.FK_product_supplier">
+            <End Role="supplier_information" EntitySet="supplier_information" />
+            <End Role="product_information" EntitySet="product_information" />
+          </AssociationSet>
+          <EntitySet Name="AspNetUsers" EntityType="Inovice.AspNetUser" />
+          <AssociationSet Name="FK_order_AspNetUsers" Association="Inovice.FK_order_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="order_master" EntitySet="order_master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_order_master" Association="Inovice.FK_product_order_master">
+            <End Role="product_information" EntitySet="product_information" />
+            <End Role="order_master" EntitySet="order_master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_category_order_master" Association="Inovice.FK_category_order_master">
+            <End Role="category_information" EntitySet="category_information" />
+            <End Role="order_master" EntitySet="order_master" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="order_master" Relationship="Inovice.FK_order_AspNetUsers" FromRole="AspNetUser" ToRole="order_master" />
+        </EntityType>
+        <Association Name="FK_order_AspNetUsers">
+          <End Type="Inovice.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+          <End Type="Inovice.order_master" Role="order_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="order_master">
+              <PropertyRef Name="USER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_order_master">
+          <End Type="Inovice.product_information" Role="product_information" Multiplicity="0..1" />
+          <End Type="Inovice.order_master" Role="order_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product_information">
+              <PropertyRef Name="PRODUCT_ID" />
+            </Principal>
+            <Dependent Role="order_master">
+              <PropertyRef Name="PRODUCT_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_category_order_master">
+          <End Type="Inovice.category_information" Role="category_information" Multiplicity="0..1" />
+          <End Type="Inovice.order_master" Role="order_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category_information">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="order_master">
+              <PropertyRef Name="CATEGORY_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="InoviceStoreContainer" CdmEntityContainer="InoviceConnection">
+          <EntitySetMapping Name="category_information">
+            <EntityTypeMapping TypeName="Inovice.category_information">
+              <MappingFragment StoreEntitySet="category_information">
+                <ScalarProperty Name="CATEGORY_NAME" ColumnName="CATEGORY_NAME" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="customer_information">
+            <EntityTypeMapping TypeName="Inovice.customer_information">
+              <MappingFragment StoreEntitySet="customer_information">
+                <ScalarProperty Name="CUSTOMER_ID" ColumnName="CUSTOMER_ID" />
+                <ScalarProperty Name="CUSTOMER_LASTNAME" ColumnName="CUSTOMER_LASTNAME" />
+                <ScalarProperty Name="CUSTOMER_FIRSTNAME" ColumnName="CUSTOMER_FIRSTNAME" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+                <ScalarProperty Name="PROVINCE" ColumnName="PROVINCE" />
+                <ScalarProperty Name="POSTAL_CODE" ColumnName="POSTAL_CODE" />
+                <ScalarProperty Name="USER_NAME" ColumnName="USER_NAME" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="USERTYPE" ColumnName="USERTYPE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="order_detail">
+            <EntityTypeMapping TypeName="Inovice.order_detail">
+              <MappingFragment StoreEntitySet="order_detail">
+                <ScalarProperty Name="ORDER_ID" ColumnName="ORDER_ID" />
+                <ScalarProperty Name="PRODUCT_ID" ColumnName="PRODUCT_ID" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="UNIT_PRICE" ColumnName="UNIT_PRICE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="order_master">
+            <EntityTypeMapping TypeName="Inovice.order_master">
+              <MappingFragment StoreEntitySet="order_master">
+                <ScalarProperty Name="CATEGORY_ID" ColumnName="CATEGORY_ID" />
+                <ScalarProperty Name="UNIT_PRICE" ColumnName="UNIT_PRICE" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="PRODUCT_ID" ColumnName="PRODUCT_ID" />
+                <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+                <ScalarProperty Name="ORDER_ID" ColumnName="ORDER_ID" />
+                <ScalarProperty Name="CUSTOMER_ID" ColumnName="CUSTOMER_ID" />
+                <ScalarProperty Name="ORDER_DATE" ColumnName="ORDER_DATE" />
+                <ScalarProperty Name="SHIPPING_FIRSTNAME" ColumnName="SHIPPING_FIRSTNAME" />
+                <ScalarProperty Name="SHIPPING_LASTNAME" ColumnName="SHIPPING_LASTNAME" />
+                <ScalarProperty Name="SHIPPING_ADDRESS" ColumnName="SHIPPING_ADDRESS" />
+                <ScalarProperty Name="SHIPPING_CITY" ColumnName="SHIPPING_CITY" />
+                <ScalarProperty Name="SHIPPING_STATE" ColumnName="SHIPPING_STATE" />
+                <ScalarProperty Name="SHIPPING_POSTAL_CODE" ColumnName="SHIPPING_POSTAL_CODE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="product_information">
+            <EntityTypeMapping TypeName="Inovice.product_information">
+              <MappingFragment StoreEntitySet="product_information">
+                <ScalarProperty Name="PRODUCT_ID" ColumnName="PRODUCT_ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="SUPPLIER_ID" ColumnName="SUPPLIER_ID" />
+                <ScalarProperty Name="CATEGORY_ID" ColumnName="CATEGORY_ID" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="UNIT_PRICE" ColumnName="UNIT_PRICE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="supplier_information">
+            <EntityTypeMapping TypeName="Inovice.supplier_information">
+              <MappingFragment StoreEntitySet="supplier_information">
+                <ScalarProperty Name="SUPPLIER_NAME" ColumnName="SUPPLIER_NAME" />
+                <ScalarProperty Name="SUPPLIER_ID" ColumnName="SUPPLIER_ID" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="POSTAL_CODE" ColumnName="POSTAL_CODE" />
+                <ScalarProperty Name="COUNTRY" ColumnName="COUNTRY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="Inovice.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
